@@ -1,0 +1,14 @@
+{
+    "module": "ConfirmCancel",
+    "name": "Confirm Cancel",
+    "description": "Confirm before discarding unsaved changes when canceling an EspoCRM form.",
+    "author": "Anthony Andriano",
+    "bundled": true,
+    "acceptableVersions": [
+        ">=10.0.0"
+    ],
+    "php": [
+        ">=8.5"
+    ],
+    "scripts": []
+}

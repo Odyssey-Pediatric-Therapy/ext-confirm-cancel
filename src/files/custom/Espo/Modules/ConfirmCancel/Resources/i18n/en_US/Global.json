@@ -1,0 +1,9 @@
+{
+    "messages": {
+        "confirmDiscardChanges": "You have unsaved changes. Discard them and cancel editing?"
+    },
+    "labels": {
+        "Discard Changes": "Discard Changes",
+        "Keep Editing": "Keep Editing"
+    }
+}

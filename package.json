@@ -1,0 +1,23 @@
+{
+    "name": "ext-confirm-cancel",
+    "version": "1.0.0",
+    "description": "Confirm before discarding unsaved changes when canceling an EspoCRM form.",
+    "type": "module",
+    "license": "CC0-1.0",
+    "author": "Anthony Andriano",
+    "scripts": {
+        "test": "node --test tests/client/*.test.js",
+        "extension": "node build --extension",
+        "copy": "node build --copy",
+        "clear-cache": "php site/clear_cache.php",
+        "rebuild": "node build --rebuild"
+    },
+    "dependencies": {
+        "espo-extension-tools": "github:espocrm/extension-tools#0.4.5",
+        "fs-extra": "^11.0.0"
+    },
+    "engines": {
+        "node": ">=24",
+        "npm": ">=11"
+    }
+}

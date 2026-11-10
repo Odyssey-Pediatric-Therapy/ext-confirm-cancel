@@ -1,0 +1,12 @@
+{
+    "viewSetupHandlers": {
+        "record/detail": [
+            "__APPEND__",
+            "confirm-cancel:handlers/record/confirm-cancel"
+        ],
+        "record/edit": [
+            "__APPEND__",
+            "confirm-cancel:handlers/record/confirm-cancel"
+        ]
+    }
+}
