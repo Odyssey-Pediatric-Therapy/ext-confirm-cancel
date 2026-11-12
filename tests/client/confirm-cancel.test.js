@@ -20,7 +20,7 @@ function fixture({changed = false, buffered = false, confirm = async () => {}} =
       assert.equal(options.message, 'confirmDiscardChanges');
       assert.equal(options.confirmText, 'Discard Changes');
       assert.equal(options.cancelText, 'Keep Editing');
-      return confirm();
+      return confirm(options);
     },
     actionCancelEdit() { state.cancellations++; state.values = null; },
     actionCancel() { state.cancellations++; state.values = null; },
@@ -55,13 +55,29 @@ test('discard confirmation invokes the existing cancel behavior once', async () 
   }
 });
 
-test('Keep Editing or closing the dialog preserves unsaved values and permits another attempt', async () => {
-  const {actions, state} = fixture({changed: true, confirm: async () => { throw new Error('dismissed'); }});
-  await actions.cancelEdit();
-  await actions.cancelEdit();
-  assert.equal(state.confirmCalls, 2);
-  assert.equal(state.cancellations, 0);
-  assert.deepEqual(state.values, {name: 'unsaved'});
+test('dismissal preserves unsaved values and allows reopening then discarding', async () => {
+  for (const action of ['cancelEdit', 'cancel']) {
+    const dialogs = [];
+    const {actions, state} = fixture({
+      changed: true,
+      confirm: options => new Promise(resolve => {
+        dialogs.push({dismiss: () => options.cancelCallback?.(), discard: resolve});
+      }),
+    });
+    // EspoCRM calls cancelCallback on Escape, Keep Editing, or backdrop dismissal
+    // without resolving or rejecting the confirmation promise.
+    const first = actions[action]();
+    dialogs[0].dismiss();
+    // Allow the dismissal handler to finish before the next click.
+    await new Promise(resolve => setImmediate(resolve));
+    const second = actions[action]();
+    assert.equal(state.confirmCalls, 2);
+    assert.equal(state.cancellations, 0);
+    assert.deepEqual(state.values, {name: 'unsaved'});
+    dialogs[1].discard();
+    await Promise.all([first, second]);
+    assert.equal(state.cancellations, 1);
+  }
 });
 
 test('focused input is fetched before testing for unsaved changes', async () => {
