@@ -34,12 +34,16 @@ export default class ConfirmCancel {
 
     this.pending = true;
     try {
-      await view.confirm({
-        message: view.translate('confirmDiscardChanges', 'messages'),
-        confirmText: view.translate('Discard Changes'),
-        cancelText: view.translate('Keep Editing'),
-        confirmStyle: 'danger',
+      const confirmed = await new Promise((resolve, reject) => {
+        view.confirm({
+          message: view.translate('confirmDiscardChanges', 'messages'),
+          confirmText: view.translate('Discard Changes'),
+          cancelText: view.translate('Keep Editing'),
+          confirmStyle: 'danger',
+          cancelCallback: () => resolve(false),
+        }).then(() => resolve(true), reject);
       });
+      if (!confirmed) return;
     } catch {
       return; // Dismissal preserves the form and its unsaved values.
     } finally {
