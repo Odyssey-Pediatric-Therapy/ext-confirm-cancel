@@ -34,7 +34,6 @@ export default class ConfirmCancel {
 
     this.pending = true;
     try {
-      // EspoCRM reports dismissal via cancelCallback, leaving its promise pending.
       const confirmed = await new Promise((resolve, reject) => {
         view.confirm({
           message: view.translate('confirmDiscardChanges', 'messages'),

@@ -64,11 +64,8 @@ test('dismissal preserves unsaved values and allows reopening then discarding', 
         dialogs.push({dismiss: () => options.cancelCallback?.(), discard: resolve});
       }),
     });
-    // EspoCRM calls cancelCallback on Escape, Keep Editing, or backdrop dismissal
-    // without resolving or rejecting the confirmation promise.
     const first = actions[action]();
     dialogs[0].dismiss();
-    // Allow the dismissal handler to finish before the next click.
     await new Promise(resolve => setImmediate(resolve));
     const second = actions[action]();
     assert.equal(state.confirmCalls, 2);
